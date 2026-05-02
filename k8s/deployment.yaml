@@ -1,0 +1,23 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cvflow
+  namespace: cvflow
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: cvflow
+  template:
+    metadata:
+      labels:
+        app: cvflow
+    spec:
+      containers:
+      - name: cvflow
+        image: 10.10.0.50:32000/cvflow:latest
+        ports:
+        - containerPort: 80
+        env:
+        - name: VITE_API_URL
+          value: "https://cvflow-api.onemad.uk/api"
