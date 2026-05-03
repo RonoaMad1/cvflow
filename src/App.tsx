@@ -7,6 +7,7 @@ import RegisterPage from './pages/RegisterPage'
 import CVEditorPage from './pages/CVEditorPage'
 import AIConfigPage from './pages/AIConfigPage'
 import JobScannerPage from './pages/JobScannerPage'
+import KanbanPage from './pages/KanbanPage'
 
 function App() {
   return (
@@ -19,6 +20,7 @@ function App() {
         <Route path="/dashboard/cv" element={<CVEditorPage />} />
         <Route path="/dashboard/ai" element={<AIConfigPage />} />
         <Route path="/dashboard/jobs" element={<JobScannerPage />} />
+        <Route path="/dashboard/kanban" element={<KanbanPage />} />
         <Route path="/dashboard/cv" element={<DashboardPage />} />
         <Route path="/dashboard/ai" element={<DashboardPage />} />
         <Route path="/:username" element={<CVPage />} />
