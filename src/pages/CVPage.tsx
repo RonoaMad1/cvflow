@@ -181,7 +181,7 @@ export default function CVPage() {
               </div>
             )}
 
-            {(cv as any).certifications?.length > 0 && activeSection === 'experience' && (
+            {(cv as any).certifications?.length > 0 && activeSection === 'certifications' && (
               <div className="bg-slate-800/50 rounded-2xl p-6 border border-slate-700 mt-4">
                 <h2 className="text-lg font-bold mb-4 flex items-center gap-2"><span className="text-emerald-400">▸</span> Certifications</h2>
                 <div className="grid grid-cols-2 gap-3">
