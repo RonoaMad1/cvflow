@@ -5,7 +5,7 @@ import axios from 'axios'
 
 const API = import.meta.env.VITE_API_URL || 'http://localhost:4000/api'
 const GRADE_COLORS: any = { A: 'bg-green-500', B: 'bg-emerald-500', C: 'bg-yellow-500', D: 'bg-orange-500', F: 'bg-red-500' }
-const STATUS_LABELS: any = { new: 'Nouveau', applied: 'Postule', interview: 'Entretien', offer: 'Offre', rejected: 'Refuse' }
+const STATUS_LABELS: any = { new: 'Nouveau', applied: 'Postule', interview: 'Entretien', offer: 'Offre', rejected: 'Refuse', archived: 'Archive' }
 
 export default function JobScannerPage() {
   const { user } = useAuthStore()
@@ -51,6 +51,18 @@ export default function JobScannerPage() {
       alert(e.response?.data?.error || 'Erreur analyse')
     }
     setAnalyzing(false)
+  }
+
+  const deleteJob = async (id: string) => {
+    if (!confirm('Supprimer cette offre ?')) return
+    try {
+      await axios.delete(API + '/jobs/' + id, { headers: { Authorization: 'Bearer ' + token() } })
+      loadJobs()
+    } catch {}
+  }
+
+  const archiveJob = async (id: string) => {
+    await updateStatus(id, 'archived')
   }
 
   const updateStatus = async (id: string, status: string) => {
@@ -193,6 +205,14 @@ export default function JobScannerPage() {
                     className="bg-slate-700 text-slate-300 rounded-lg px-2 py-1 text-xs focus:outline-none focus:ring-1 focus:ring-emerald-500">
                     {Object.entries(STATUS_LABELS).map(([k, v]) => <option key={k} value={k}>{v as string}</option>)}
                   </select>
+                  <button onClick={() => archiveJob(job.id)} title="Archiver"
+                    className="w-7 h-7 flex items-center justify-center bg-slate-700 hover:bg-slate-600 rounded-lg text-slate-400 hover:text-yellow-400 transition text-xs">
+                    ⬇
+                  </button>
+                  <button onClick={() => deleteJob(job.id)} title="Supprimer"
+                    className="w-7 h-7 flex items-center justify-center bg-slate-700 hover:bg-red-500/20 rounded-lg text-slate-400 hover:text-red-400 transition text-xs">
+                    ✕
+                  </button>
                 </div>
               </div>
             ))}
