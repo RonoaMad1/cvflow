@@ -71,8 +71,8 @@ export default function CVPage() {
 
           <div className="lg:col-span-1 space-y-5">
             <div className="bg-gradient-to-br from-slate-800 to-slate-900 rounded-2xl p-6 text-center border border-slate-700">
-              <div className="w-28 h-28 rounded-full bg-gradient-to-br from-emerald-500 to-teal-600 flex items-center justify-center text-4xl font-bold mx-auto mb-4 shadow-lg shadow-emerald-500/20">
-                {cv.firstName?.[0]}{cv.lastName?.[0]}
+              <div className="w-28 h-28 rounded-full bg-gradient-to-br from-emerald-500 to-teal-600 flex items-center justify-center text-4xl font-bold mx-auto mb-4 shadow-lg shadow-emerald-500/20 overflow-hidden">
+                {(cv as any).photo ? <img src={(cv as any).photo} alt="photo" className="w-full h-full object-cover" /> : <span>{cv.firstName?.[0]}{cv.lastName?.[0]}</span>}
               </div>
               <h1 className="text-2xl font-bold">{cv.firstName} {cv.lastName}</h1>
               <p className="text-emerald-400 font-medium mt-1 text-sm">{cv.title}</p>
@@ -177,6 +177,27 @@ export default function CVPage() {
                       </div>
                     ))}
                   </div>
+                </div>
+              </div>
+            )}
+
+            {(cv as any).certifications?.length > 0 && activeSection === 'experience' && (
+              <div className="bg-slate-800/50 rounded-2xl p-6 border border-slate-700 mt-4">
+                <h2 className="text-lg font-bold mb-4 flex items-center gap-2"><span className="text-emerald-400">▸</span> Certifications</h2>
+                <div className="grid grid-cols-2 gap-3">
+                  {(cv as any).certifications.map((cert: any, i: number) => (
+                    <div key={i} className="p-3 bg-slate-700/50 rounded-xl border border-slate-600">
+                      <div className="flex items-start justify-between gap-2">
+                        <div>
+                          <h3 className="font-semibold text-sm text-white">{cert.name}</h3>
+                          <p className="text-emerald-400 text-xs">{cert.issuer}</p>
+                          <p className="text-slate-500 text-xs mt-1">{cert.date}{cert.expiry ? ' → ' + cert.expiry : ''}</p>
+                        </div>
+                        <span className="text-lg">🏆</span>
+                      </div>
+                      {cert.url && <a href={cert.url} target="_blank" className="text-blue-400 text-xs hover:underline mt-1 block">Voir le badge</a>}
+                    </div>
+                  ))}
                 </div>
               </div>
             )}

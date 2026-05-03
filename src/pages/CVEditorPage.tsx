@@ -19,6 +19,8 @@ export default function CVEditorPage() {
   const [education, setEducation] = useState<any[]>([])
   const [skills, setSkills] = useState<any[]>([])
   const [languages, setLanguages] = useState<any[]>([])
+  const [certifications, setCertifications] = useState<any[]>([])
+  const [photo, setPhoto] = useState<string>('')
 
   useEffect(() => {
     if (!user) { navigate('/login'); return }
@@ -30,6 +32,8 @@ export default function CVEditorPage() {
         setEducation(Array.isArray(d.education) ? d.education : [])
         setSkills(Array.isArray(d.skills) ? d.skills : [])
         setLanguages(Array.isArray(d.languages) ? d.languages : [])
+        setCertifications(Array.isArray(d.certifications) ? d.certifications : [])
+        setPhoto(d.photo || '')
       }
     }).catch(() => {})
   }, [user])
@@ -37,7 +41,7 @@ export default function CVEditorPage() {
   const save = async () => {
     setSaving(true)
     try {
-      await cvAPI.update({ ...cv, experiences, education, skills, languages })
+      await cvAPI.update({ ...cv, experiences, education, skills, languages, certifications, photo })
       setSaved(true)
       setTimeout(() => setSaved(false), 2000)
     } catch { alert('Erreur sauvegarde') }
@@ -45,7 +49,7 @@ export default function CVEditorPage() {
   }
 
   const ic = "w-full bg-slate-700 text-white rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-emerald-500 placeholder-slate-500"
-  const tabs = [{ id: 'info', label: 'Infos' }, { id: 'exp', label: 'Experiences' }, { id: 'edu', label: 'Formation' }, { id: 'skills', label: 'Competences' }, { id: 'langs', label: 'Langues' }]
+  const tabs = [{ id: 'info', label: 'Infos' }, { id: 'exp', label: 'Experiences' }, { id: 'edu', label: 'Formation' }, { id: 'skills', label: 'Competences' }, { id: 'langs', label: 'Langues' }, { id: 'certs', label: 'Certifications' }, { id: 'photo', label: 'Photo' }]
 
   return (
     <div className="min-h-screen bg-slate-900 text-white">
@@ -141,6 +145,45 @@ export default function CVEditorPage() {
               </div>
             ))}
             <button onClick={() => setSkills([...skills, emptySkill()])} className="w-full py-3 border-2 border-dashed border-slate-600 hover:border-emerald-500 rounded-xl text-slate-400 hover:text-emerald-400 transition mt-2">+ Ajouter une competence</button>
+          </div>
+        )}
+
+        {activeTab === "photo" && (
+          <div className="bg-slate-800 rounded-2xl p-6 space-y-4">
+            <h2 className="text-emerald-400 font-semibold">Photo de profil</h2>
+            <p className="text-slate-400 text-sm">Collez l'URL d'une photo (ex: LinkedIn, GitHub)</p>
+            <div className="flex gap-4 items-center">
+              <div className="w-24 h-24 rounded-full bg-gradient-to-br from-emerald-500 to-teal-600 flex items-center justify-center text-3xl font-bold flex-shrink-0 overflow-hidden">
+                {photo ? <img src={photo} alt="photo" className="w-full h-full object-cover" onError={() => setPhoto('')} /> : <span>{cv.firstName?.[0]}{cv.lastName?.[0]}</span>}
+              </div>
+              <div className="flex-1">
+                <label className="text-slate-400 text-sm block mb-1">URL de la photo</label>
+                <input value={photo} onChange={e => setPhoto(e.target.value)} className={ic} placeholder="https://..." />
+              </div>
+            </div>
+          </div>
+        )}
+
+        {activeTab === "certs" && (
+          <div className="space-y-4">
+            {certifications.map((cert: any, i: number) => (
+              <div key={i} className="bg-slate-800 rounded-2xl p-6 space-y-3">
+                <div className="flex justify-between">
+                  <h3 className="text-emerald-400 font-semibold">Certification {i+1}</h3>
+                  <button onClick={() => setCertifications(certifications.filter((_:any,j:number)=>j!==i))} className="text-red-400 hover:text-red-300 text-sm">Supprimer</button>
+                </div>
+                <div className="grid grid-cols-2 gap-3">
+                  <div><label className="text-slate-400 text-sm block mb-1">Nom</label><input value={cert.name} onChange={e=>{const a=[...certifications];a[i]={...a[i],name:e.target.value};setCertifications(a)}} className={ic} placeholder="AWS Solutions Architect" /></div>
+                  <div><label className="text-slate-400 text-sm block mb-1">Organisme</label><input value={cert.issuer} onChange={e=>{const a=[...certifications];a[i]={...a[i],issuer:e.target.value};setCertifications(a)}} className={ic} placeholder="Amazon Web Services" /></div>
+                  <div><label className="text-slate-400 text-sm block mb-1">Date obtention</label><input value={cert.date} onChange={e=>{const a=[...certifications];a[i]={...a[i],date:e.target.value};setCertifications(a)}} className={ic} placeholder="2023" /></div>
+                  <div><label className="text-slate-400 text-sm block mb-1">Date expiration</label><input value={cert.expiry} onChange={e=>{const a=[...certifications];a[i]={...a[i],expiry:e.target.value};setCertifications(a)}} className={ic} placeholder="2026 (optionnel)" /></div>
+                </div>
+                <div><label className="text-slate-400 text-sm block mb-1">URL du badge (optionnel)</label><input value={cert.url} onChange={e=>{const a=[...certifications];a[i]={...a[i],url:e.target.value};setCertifications(a)}} className={ic} placeholder="https://..." /></div>
+              </div>
+            ))}
+            <button onClick={() => setCertifications([...certifications, {name:'',issuer:'',date:'',expiry:'',url:''}])} className="w-full py-3 border-2 border-dashed border-slate-600 hover:border-emerald-500 rounded-xl text-slate-400 hover:text-emerald-400 transition">
+              + Ajouter une certification
+            </button>
           </div>
         )}
 
