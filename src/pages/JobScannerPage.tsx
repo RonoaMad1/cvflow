@@ -57,24 +57,16 @@ export default function JobScannerPage() {
     try {
       const res = await axios.post(API + '/pdf/generate',
         { jobId },
-        { headers: { Authorization: 'Bearer ' + token() }, responseType: 'blob' }
+        { headers: { Authorization: 'Bearer ' + token() } }
       )
-      const url = window.URL.createObjectURL(new Blob([res.data]))
-      const a = document.createElement('a')
-      a.href = url
-      a.download = 'CV_' + (jobId ? 'adapte' : 'standard') + '.pdf'
-      document.body.appendChild(a)
-      a.click()
-      window.URL.revokeObjectURL(url)
-      document.body.removeChild(a)
-    } catch (e: any) {
-      if (e.response?.headers?.['content-type']?.includes('html')) {
-        const text = await e.response.data.text()
-        const w = window.open('', '_blank')
-        if (w) { w.document.write(text); w.document.close() }
-      } else {
-        alert('Erreur generation PDF')
+      const w = window.open('', '_blank')
+      if (w) {
+        w.document.write(res.data)
+        w.document.close()
+        setTimeout(() => w.print(), 800)
       }
+    } catch {
+      alert('Erreur generation PDF')
     }
   }
 
