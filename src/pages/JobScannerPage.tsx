@@ -53,6 +53,31 @@ export default function JobScannerPage() {
     setAnalyzing(false)
   }
 
+  const downloadPDF = async (jobId?: string) => {
+    try {
+      const res = await axios.post(API + '/pdf/generate',
+        { jobId },
+        { headers: { Authorization: 'Bearer ' + token() }, responseType: 'blob' }
+      )
+      const url = window.URL.createObjectURL(new Blob([res.data]))
+      const a = document.createElement('a')
+      a.href = url
+      a.download = 'CV_' + (jobId ? 'adapte' : 'standard') + '.pdf'
+      document.body.appendChild(a)
+      a.click()
+      window.URL.revokeObjectURL(url)
+      document.body.removeChild(a)
+    } catch (e: any) {
+      if (e.response?.headers?.['content-type']?.includes('html')) {
+        const text = await e.response.data.text()
+        const w = window.open('', '_blank')
+        if (w) { w.document.write(text); w.document.close() }
+      } else {
+        alert('Erreur generation PDF')
+      }
+    }
+  }
+
   const deleteJob = async (id: string) => {
     if (!confirm('Supprimer cette offre ?')) return
     try {
@@ -165,6 +190,17 @@ export default function JobScannerPage() {
                     </div>
                   </div>
                 )}
+
+                <div className="flex gap-2">
+                  <button onClick={() => downloadPDF(result.job?.id)}
+                    className="flex-1 py-2 bg-blue-500 hover:bg-blue-400 text-white rounded-lg text-sm font-medium transition flex items-center justify-center gap-2">
+                    PDF adapte a cette offre
+                  </button>
+                  <button onClick={() => downloadPDF()}
+                    className="py-2 px-4 bg-slate-700 hover:bg-slate-600 text-slate-300 rounded-lg text-sm transition">
+                    CV standard
+                  </button>
+                </div>
 
                 {result.analysis.recommendation && (
                   <div className="bg-emerald-500/10 border border-emerald-500/30 rounded-xl p-4">
