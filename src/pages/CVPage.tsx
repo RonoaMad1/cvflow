@@ -67,7 +67,7 @@ export default function CVPage() {
             Telecharger PDF
           </button>
         </div>
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
 
           <div className="lg:col-span-1 space-y-5">
             <div className="bg-gradient-to-br from-slate-800 to-slate-900 rounded-2xl p-6 text-center border border-slate-700">
@@ -80,7 +80,7 @@ export default function CVPage() {
 
             {yearsExp > 0 && (
               <div className="bg-slate-800/50 rounded-2xl p-4 border border-slate-700">
-                <div className="grid grid-cols-2 gap-3">
+                <div className="grid grid-cols-2 gap-2">
                   {[
                     { val: yearsExp+'+', label: "Ans exp.", color: "emerald" },
                     { val: (cv.experiences as any[])?.length||0, label: "Postes", color: "teal" },
@@ -184,7 +184,7 @@ export default function CVPage() {
             {(cv as any).certifications?.length > 0 && activeSection === 'certifications' && (
               <div className="bg-slate-800/50 rounded-2xl p-6 border border-slate-700 mt-4">
                 <h2 className="text-lg font-bold mb-4 flex items-center gap-2"><span className="text-emerald-400">▸</span> Certifications</h2>
-                <div className="grid grid-cols-2 gap-3">
+                <div className="grid grid-cols-2 gap-2">
                   {(cv as any).certifications.map((cert: any, i: number) => (
                     <div key={i} className="p-3 bg-slate-700/50 rounded-xl border border-slate-600">
                       <div className="flex items-start justify-between gap-2">
@@ -230,7 +230,7 @@ export default function CVPage() {
       </button>
 
       {chatOpen && (
-        <div className="fixed bottom-24 right-6 w-96 bg-slate-900 rounded-2xl shadow-2xl border border-slate-700 flex flex-col z-50" style={{height:'520px'}}>
+        <div className="fixed bottom-24 right-2 left-2 sm:left-auto sm:w-96 bg-slate-900 rounded-2xl shadow-2xl border border-slate-700 flex flex-col z-50" style={{height:'520px'}}>
           <div className="p-4 border-b border-slate-700 bg-gradient-to-r from-emerald-600/20 to-teal-600/20 rounded-t-2xl">
             <div className="flex items-center gap-3">
               <div className="w-8 h-8 rounded-full bg-gradient-to-br from-emerald-500 to-teal-600 flex items-center justify-center text-sm font-bold">{cv.firstName?.[0]}</div>

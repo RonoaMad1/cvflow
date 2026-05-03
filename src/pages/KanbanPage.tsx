@@ -96,12 +96,12 @@ export default function KanbanPage() {
             <div className="w-8 h-8 border-4 border-emerald-500 border-t-transparent rounded-full animate-spin"/>
           </div>
         ) : (
-          <div className="grid grid-cols-5 gap-4 overflow-x-auto pb-4">
+          <div className="flex gap-3 overflow-x-auto pb-4 min-h-screen items-start">
             {COLUMNS.map(col => (
               <div key={col.id}
                 onDragOver={onDragOver}
                 onDrop={e => onDrop(e, col.id)}
-                className={"flex flex-col rounded-2xl border-2 border-dashed transition min-h-96 " + col.color + " " + col.bg}>
+                className={"flex flex-col rounded-2xl border-2 border-dashed transition min-h-96 min-w-64 flex-shrink-0 " + col.color + " " + col.bg}>
 
                 <div className="p-3 border-b border-slate-700/50">
                   <div className="flex items-center justify-between">

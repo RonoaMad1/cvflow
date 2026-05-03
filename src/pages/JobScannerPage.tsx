@@ -120,7 +120,7 @@ export default function JobScannerPage() {
           <div className="space-y-4">
             <div className="bg-slate-800 rounded-2xl p-6 space-y-4">
               <h2 className="text-emerald-400 font-semibold">Informations de l'offre</h2>
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div><label className="text-slate-400 text-sm block mb-1">Titre du poste</label>
                   <input value={title} onChange={e => setTitle(e.target.value)} className={ic} placeholder="Administrateur Systeme" /></div>
                 <div><label className="text-slate-400 text-sm block mb-1">Entreprise</label>
@@ -153,7 +153,7 @@ export default function JobScannerPage() {
 
                 <p className="text-slate-300 italic border-l-2 border-emerald-500 pl-3">{result.analysis.summary}</p>
 
-                <div className="grid grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
                     <h3 className="text-green-400 font-semibold text-sm mb-2">✓ Points forts</h3>
                     <ul className="space-y-1">

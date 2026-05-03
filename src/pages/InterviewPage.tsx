@@ -96,8 +96,8 @@ export default function InterviewPage() {
           {jobTitle && <p className="text-slate-400 text-sm mt-2">Questions pour : {jobTitle}</p>}
         </div>
         {questions.length > 0 && (
-          <div className="grid grid-cols-3 gap-6">
-            <div className="col-span-1 space-y-2">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            <div className="col-span-1 lg:col-span-1 space-y-2">
               <h3 className="text-slate-400 text-sm font-medium mb-3">{questions.length} questions</h3>
               {questions.map((q: any, i: number) => (
                 <button key={i} onClick={() => setActiveQ(i)}
@@ -110,7 +110,7 @@ export default function InterviewPage() {
                 </button>
               ))}
             </div>
-            <div className="col-span-2">
+            <div className="col-span-1 lg:col-span-2">
               {activeQ !== null && questions[activeQ] && (
                 <div className="bg-slate-800 rounded-2xl p-6 space-y-4">
                   <div className="flex items-center gap-2 flex-wrap">

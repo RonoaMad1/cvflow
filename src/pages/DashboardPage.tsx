@@ -31,7 +31,7 @@ export default function DashboardPage() {
       <main className="max-w-4xl mx-auto px-8 py-12">
         <h1 className="text-3xl font-bold mb-2">Bonjour {user.username} !</h1>
         <p className="text-slate-400 mb-8">Ton CV est disponible sur <a href={`/${user.username}`} className="text-emerald-400 hover:underline">cvflow.onemad.uk/{user.username}</a></p>
-        <div className="grid grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
           <Link to="/dashboard/cv" className="p-6 bg-slate-800 rounded-2xl border border-slate-700 hover:border-emerald-500 transition group">
             <div className="text-3xl mb-3">📄</div>
             <h2 className="text-xl font-semibold mb-1 group-hover:text-emerald-400 transition">Mon CV</h2>

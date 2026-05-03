@@ -67,21 +67,21 @@ export default function CVEditorPage() {
             {saved ? "Sauvegarde !" : saving ? "..." : "Sauvegarder"}
           </button>
         </div>
-        <div className="flex gap-2 mb-6 overflow-x-auto pb-1">
+        <div className="flex gap-1 mb-6 overflow-x-auto pb-2 scrollbar-hide">
           {tabs.map(t => <button key={t.id} onClick={() => setActiveTab(t.id)} className={"px-4 py-2 rounded-lg text-sm font-medium whitespace-nowrap transition " + (activeTab === t.id ? "bg-emerald-500 text-white" : "bg-slate-800 text-slate-400 hover:text-white")}>{t.label}</button>)}
         </div>
 
         {activeTab === "info" && (
           <div className="space-y-4 bg-slate-800 rounded-2xl p-6">
             <h2 className="text-emerald-400 font-semibold">Informations personnelles</h2>
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div><label className="text-slate-400 text-sm block mb-1">Prenom</label><input value={cv.firstName} onChange={e => setCV({...cv, firstName: e.target.value})} className={ic} placeholder="Jean" /></div>
               <div><label className="text-slate-400 text-sm block mb-1">Nom</label><input value={cv.lastName} onChange={e => setCV({...cv, lastName: e.target.value})} className={ic} placeholder="Dupont" /></div>
             </div>
             <div><label className="text-slate-400 text-sm block mb-1">Titre professionnel</label><input value={cv.title} onChange={e => setCV({...cv, title: e.target.value})} className={ic} placeholder="Developpeur Full Stack" /></div>
             <div><label className="text-slate-400 text-sm block mb-1">Resume</label><textarea value={cv.summary} onChange={e => setCV({...cv, summary: e.target.value})} className={ic + " h-28"} placeholder="Decrivez votre profil..." /></div>
             <h2 className="text-emerald-400 font-semibold pt-2">Contact</h2>
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div><label className="text-slate-400 text-sm block mb-1">Email</label><input value={cv.email} onChange={e => setCV({...cv, email: e.target.value})} className={ic} /></div>
               <div><label className="text-slate-400 text-sm block mb-1">Telephone</label><input value={cv.phone} onChange={e => setCV({...cv, phone: e.target.value})} className={ic} /></div>
               <div><label className="text-slate-400 text-sm block mb-1">Localisation</label><input value={cv.location} onChange={e => setCV({...cv, location: e.target.value})} className={ic} /></div>
@@ -97,7 +97,7 @@ export default function CVEditorPage() {
             {experiences.map((exp, i) => (
               <div key={exp.id} className="bg-slate-800 rounded-2xl p-6 space-y-3">
                 <div className="flex justify-between"><h3 className="text-emerald-400 font-semibold">Experience {i+1}</h3><button onClick={() => setExperiences(experiences.filter((_,j)=>j!==i))} className="text-red-400 hover:text-red-300 text-sm">Supprimer</button></div>
-                <div className="grid grid-cols-2 gap-3">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                   <div><label className="text-slate-400 text-sm block mb-1">Entreprise</label><input value={exp.company} onChange={e=>{const a=[...experiences];a[i]={...a[i],company:e.target.value};setExperiences(a)}} className={ic} placeholder="BNP Paribas" /></div>
                   <div><label className="text-slate-400 text-sm block mb-1">Poste</label><input value={exp.role} onChange={e=>{const a=[...experiences];a[i]={...a[i],role:e.target.value};setExperiences(a)}} className={ic} placeholder="Administrateur Systeme" /></div>
                   <div><label className="text-slate-400 text-sm block mb-1">Date debut</label><input value={exp.startDate} onChange={e=>{const a=[...experiences];a[i]={...a[i],startDate:e.target.value};setExperiences(a)}} className={ic} placeholder="2019" /></div>
@@ -119,7 +119,7 @@ export default function CVEditorPage() {
             {education.map((edu, i) => (
               <div key={edu.id} className="bg-slate-800 rounded-2xl p-6 space-y-3">
                 <div className="flex justify-between"><h3 className="text-emerald-400 font-semibold">Formation {i+1}</h3><button onClick={() => setEducation(education.filter((_,j)=>j!==i))} className="text-red-400 hover:text-red-300 text-sm">Supprimer</button></div>
-                <div className="grid grid-cols-2 gap-3">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                   <div><label className="text-slate-400 text-sm block mb-1">Ecole</label><input value={edu.school} onChange={e=>{const a=[...education];a[i]={...a[i],school:e.target.value};setEducation(a)}} className={ic} placeholder="ESGI" /></div>
                   <div><label className="text-slate-400 text-sm block mb-1">Diplome</label><input value={edu.degree} onChange={e=>{const a=[...education];a[i]={...a[i],degree:e.target.value};setEducation(a)}} className={ic} placeholder="Master" /></div>
                   <div><label className="text-slate-400 text-sm block mb-1">Domaine</label><input value={edu.field} onChange={e=>{const a=[...education];a[i]={...a[i],field:e.target.value};setEducation(a)}} className={ic} placeholder="Informatique" /></div>
@@ -172,7 +172,7 @@ export default function CVEditorPage() {
                   <h3 className="text-emerald-400 font-semibold">Certification {i+1}</h3>
                   <button onClick={() => setCertifications(certifications.filter((_:any,j:number)=>j!==i))} className="text-red-400 hover:text-red-300 text-sm">Supprimer</button>
                 </div>
-                <div className="grid grid-cols-2 gap-3">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                   <div><label className="text-slate-400 text-sm block mb-1">Nom</label><input value={cert.name} onChange={e=>{const a=[...certifications];a[i]={...a[i],name:e.target.value};setCertifications(a)}} className={ic} placeholder="AWS Solutions Architect" /></div>
                   <div><label className="text-slate-400 text-sm block mb-1">Organisme</label><input value={cert.issuer} onChange={e=>{const a=[...certifications];a[i]={...a[i],issuer:e.target.value};setCertifications(a)}} className={ic} placeholder="Amazon Web Services" /></div>
                   <div><label className="text-slate-400 text-sm block mb-1">Date obtention</label><input value={cert.date} onChange={e=>{const a=[...certifications];a[i]={...a[i],date:e.target.value};setCertifications(a)}} className={ic} placeholder="2023" /></div>
