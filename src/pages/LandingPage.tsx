@@ -46,7 +46,7 @@ export default function LandingPage() {
             <span className="text-emerald-400">alimenté par l IA</span>
           </h1>
           <p className="text-xl text-slate-400 max-w-2xl mx-auto mb-10">
-            Creez un CV public moderne avec chatbot IA, scannez les offres d emploi, suivez vos candidatures et preparez vos entretiens — tout en un.
+            Un CV interactif qui répond à vos recruteurs. Des outils IA pour trouver, analyser, préparer vos entretiens et décrocher le poste qui vous correspond.
           </p>
           <div className="flex gap-4 justify-center flex-wrap">
             <Link to="/register" className="px-8 py-4 bg-emerald-500 hover:bg-emerald-400 rounded-xl text-lg font-semibold transition shadow-lg shadow-emerald-500/20">
