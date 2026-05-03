@@ -150,10 +150,10 @@ export default function CVPage() {
             )}
 
             <div className="flex gap-2">
-              {['experience','education'].map(s => (
+              {['experience','education','certifications'].map(s => (
                 <button key={s} onClick={() => setActiveSection(s)}
                   className={"px-4 py-2 rounded-lg text-sm font-medium transition " + (activeSection===s ? "bg-emerald-500 text-white" : "bg-slate-800 text-slate-400 hover:text-white border border-slate-700")}>
-                  {s==='experience' ? 'Experiences' : 'Formation'}
+                  {s==='experience' ? 'Experiences' : s==='education' ? 'Formation' : 'Certifications'}
                 </button>
               ))}
             </div>
