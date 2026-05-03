@@ -52,6 +52,11 @@ export default function DashboardPage() {
             <h2 className="text-xl font-semibold mb-1 group-hover:text-emerald-400 transition">Kanban</h2>
             <p className="text-slate-400 text-sm">Suivre mes candidatures visuellement</p>
           </Link>
+          <Link to="/dashboard/interview" className="p-6 bg-slate-800 rounded-2xl border border-slate-700 hover:border-emerald-500 transition group">
+            <div className="text-3xl mb-3">🎯</div>
+            <h2 className="text-xl font-semibold mb-1 group-hover:text-emerald-400 transition">Prep entretien</h2>
+            <p className="text-slate-400 text-sm">Questions IA + evaluation de vos reponses</p>
+          </Link>
         </div>
       </main>
     </div>
