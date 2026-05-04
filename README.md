@@ -1,73 +1,136 @@
-# React + TypeScript + Vite
+# CVFlow 🚀
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Plateforme de carrière alimentée par l'IA — CV interactif, scanner d'offres, kanban candidatures et préparation aux entretiens.
 
-Currently, two official plugins are available:
+🌐 **Production** : [cvflow.onemad.uk](https://cvflow.onemad.uk)
+📄 **Exemple CV** : [cvflow.onemad.uk/mady](https://cvflow.onemad.uk/mady)
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+---
 
-## React Compiler
+## Fonctionnalités
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+- **CV public interactif** — URL partageable, design moderne avec sidebar, timeline et stats
+- **Chatbot IA** — Assistant qui répond aux recruteurs 24h/24 (Ollama / Gemini / Claude)
+- **Scanner d'offres** — Analyse IA avec scoring A-F et mots-clés
+- **Kanban candidatures** — Suivi visuel drag & drop (Nouveau → Postulé → Entretien → Offre → Refusé)
+- **CV PDF adapté** — Génération PDF personnalisé par offre avec mots-clés injectés
+- **Préparation entretiens** — Questions IA + évaluation des réponses STAR
+- **Certifications & Photo** — Ajout de certifications avec badge et photo de profil
+- **Responsive** — Compatible mobile, tablette et desktop
 
-## Expanding the ESLint configuration
+---
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+## Stack technique
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+### Frontend
+- React 19 + TypeScript + Vite
+- Tailwind CSS
+- Zustand (state management)
+- React Router v6
+- Axios
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+### Backend
+- Node.js + Express + TypeScript
+- Prisma v7 + PostgreSQL
+- JWT Authentication
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+### IA
+- Ollama (local) — qwen2.5:14b, qwen3.6:27b
+- Google Gemini API
+- Anthropic Claude API
+
+### Infrastructure
+- Kubernetes K3s (3 nœuds)
+- ArgoCD (GitOps)
+- Cloudflare Tunnel
+- Tailscale (réseau privé)
+
+---
+
+## Architecture
+---
+
+## Installation locale
+
+### Prérequis
+- Node.js 18+
+- PostgreSQL
+- Ollama (optionnel)
+
+### Frontend
+```bash
+git clone https://github.com/RonoaMad1/cvflow
+cd cvflow
+npm install
+cp .env.example .env
+npm run dev
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
-
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+### Backend
+```bash
+git clone https://github.com/RonoaMad1/cvflow-api
+cd cvflow-api
+npm install
+cp .env.example .env
+npm run dev
 ```
+
+### Variables d'environnement Backend (.env)
+```env
+DATABASE_URL=postgresql://user:password@localhost:5432/cvflow
+JWT_SECRET=votre-secret
+OLLAMA_URL=http://localhost:11434
+GEMINI_API_KEY=votre-cle-gemini
+ANTHROPIC_API_KEY=votre-cle-anthropic
+```
+
+---
+
+## Structure base de données
+
+```sql
+User        — id, email, password, username
+CV          — id, userId, firstName, lastName, title, summary,
+              email, phone, location, linkedin, github, website,
+              experiences, education, skills, languages,
+              certifications, photo,
+              aiProvider, aiModel, systemPrompt, isPublic
+Job         — id, userId, url, title, company, description,
+              score, grade, analysis, status, createdAt
+```
+
+---
+
+## Déploiement K8s
+
+```bash
+# Build et push image
+nerdctl build --no-cache -t registry:32000/cvflow:vX .
+nerdctl push registry:32000/cvflow:vX --insecure-registry
+
+# Déployer
+kubectl set image deployment/cvflow cvflow=registry:32000/cvflow:vX -n cvflow
+```
+
+---
+
+## Modèles IA recommandés
+
+| Usage | Modèle | Raison |
+|-------|--------|--------|
+| Chatbot | qwen2.5:14b | Rapide, bon français |
+| Scanner offres | qwen2.5:14b | JSON structuré fiable |
+| Prépa entretiens | qwen2.5:14b | Bon raisonnement |
+| Alternative cloud | gemini-2.0-flash | Très rapide, gratuit |
+
+---
+
+## Auteur
+
+**Mady NIAKATE** — Administrateur Système & DevOps
+- CV : [cvflow.onemad.uk/mady](https://cvflow.onemad.uk/mady)
+- GitHub : [github.com/RonoaMad1](https://github.com/RonoaMad1)
+
+---
+
+*CVFlow — Votre carrière, propulsée par l'IA* 🚀
