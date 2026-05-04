@@ -42,7 +42,7 @@ export default function LandingPage() {
             Plateforme de carriere IA
           </div>
           <h1 className="text-3xl sm:text-5xl font-bold text-white mb-6 leading-tight">
-            Votre CV interactif<br/>
+            Votre carrière,<br/>
             <span className="text-emerald-400">alimenté par l IA</span>
           </h1>
           <p className="text-xl text-slate-400 max-w-2xl mx-auto mb-10">
