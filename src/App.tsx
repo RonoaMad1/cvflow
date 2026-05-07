@@ -5,6 +5,7 @@ import DashboardPage from './pages/DashboardPage'
 import LoginPage from './pages/LoginPage'
 import RegisterPage from './pages/RegisterPage'
 import LandingPage from './pages/LandingPage'
+import AdminDashboard from './pages/AdminDashboard'
 import CVEditorPage from './pages/CVEditorPage'
 import AIConfigPage from './pages/AIConfigPage'
 import JobScannerPage from './pages/JobScannerPage'
@@ -26,6 +27,7 @@ function App() {
         <Route path="/dashboard/interview" element={<InterviewPage />} />
         <Route path="/dashboard/cv" element={<DashboardPage />} />
         <Route path="/dashboard/ai" element={<DashboardPage />} />
+        <Route path="/admin" element={<AdminDashboard />} />
         <Route path="/:username" element={<CVPage />} />
       </Routes>
     </BrowserRouter>
