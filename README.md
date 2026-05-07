@@ -1,21 +1,36 @@
 # CVFlow 🚀
 
-Plateforme de carrière alimentée par l'IA — CV interactif, scanner d'offres, kanban candidatures et préparation aux entretiens.
+Plateforme de carrière propulsée par l'IA — CV interactif, chatbot vocal, scanner d'offres, kanban et préparation aux entretiens.
 
 🌐 **Production** : [cvflow.onemad.uk](https://cvflow.onemad.uk)
 📄 **Exemple CV** : [cvflow.onemad.uk/mady](https://cvflow.onemad.uk/mady)
+📊 **Dashboard LLMOps** : [cvflow.onemad.uk/admin](https://cvflow.onemad.uk/admin)
 
 ---
 
 ## Fonctionnalités
 
+### CV & Chatbot IA
 - **CV public interactif** — URL partageable, design moderne avec sidebar, timeline et stats
-- **Chatbot IA** — Assistant qui répond aux recruteurs 24h/24 (Ollama / Gemini / Claude)
+- **Chatbot IA avec RAG** — Répond aux recruteurs avec le contexte exact du CV (Ollama / Gemini / Claude)
+- **Mode vocal** — 🎤 Parlez directement au chatbot, 🔊 les réponses sont lues à voix haute (Web Speech API)
+- **Défense anti-injection** — 12 patterns de jailbreak bloqués automatiquement
+
+### Outils carrière
 - **Scanner d'offres** — Analyse IA avec scoring A-F et mots-clés
 - **Kanban candidatures** — Suivi visuel drag & drop (Nouveau → Postulé → Entretien → Offre → Refusé)
-- **CV PDF adapté** — Génération PDF personnalisé par offre avec mots-clés injectés
+- **CV PDF adapté** — Génération PDF personnalisé par offre
 - **Préparation entretiens** — Questions IA + évaluation des réponses STAR
-- **Certifications & Photo** — Ajout de certifications avec badge et photo de profil
+
+### LLMOps Dashboard (/admin)
+- **Overview** — KPIs temps réel, activité 30j, providers IA, index RAG
+- **Conversations** — Historique complet avec latences et filtres
+- **Sécurité** — Patterns de jailbreak, historique des tentatives
+
+### Qualité
+- **15 evals automatisés** — Factual, Persona, Sécurité, Qualité, Langue
+- **100% de réussite** sur tous les profils testés
+- **Certifications & Photo** — Badge et photo de profil
 - **Responsive** — Compatible mobile, tablette et desktop
 
 ---
@@ -27,37 +42,46 @@ Plateforme de carrière alimentée par l'IA — CV interactif, scanner d'offres,
 - Tailwind CSS
 - Zustand (state management)
 - React Router v6
-- Axios
+- Web Speech API (vocal)
 
 ### Backend
 - Node.js + Express + TypeScript
 - Prisma v7 + PostgreSQL
 - JWT Authentication
+- RAG avec embeddings Ollama (nomic-embed-text)
 
 ### IA
-- Ollama (local) — qwen2.5:14b, qwen3.6:27b
+- Ollama (local) — qwen2.5:14b
 - Google Gemini API
 - Anthropic Claude API
 
 ### Infrastructure
-- Kubernetes K3s (3 nœuds)
+- Kubernetes K3s (3 noeuds)
 - ArgoCD (GitOps)
 - Cloudflare Tunnel
 - Tailscale (réseau privé)
 
 ---
 
-## Architecture
+## Pages
+
+| Route | Description |
+|-------|-------------|
+| / | Landing page |
+| /register | Inscription |
+| /:username | CV public + chatbot vocal |
+| /dashboard | Dashboard utilisateur |
+| /dashboard/cv | Editeur CV |
+| /dashboard/ai | Config IA (provider, modèle, prompt) |
+| /dashboard/jobs | Scanner d'offres |
+| /dashboard/kanban | Kanban candidatures |
+| /dashboard/interview | Préparation entretiens |
+| /admin | Dashboard LLMOps |
+
 ---
 
 ## Installation locale
 
-### Prérequis
-- Node.js 18+
-- PostgreSQL
-- Ollama (optionnel)
-
-### Frontend
 ```bash
 git clone https://github.com/RonoaMad1/cvflow
 cd cvflow
@@ -66,62 +90,14 @@ cp .env.example .env
 npm run dev
 ```
 
-### Backend
-```bash
-git clone https://github.com/RonoaMad1/cvflow-api
-cd cvflow-api
-npm install
-cp .env.example .env
-npm run dev
-```
-
-### Variables d'environnement Backend (.env)
-```env
-DATABASE_URL=postgresql://user:password@localhost:5432/cvflow
-JWT_SECRET=votre-secret
-OLLAMA_URL=http://localhost:11434
-GEMINI_API_KEY=votre-cle-gemini
-ANTHROPIC_API_KEY=votre-cle-anthropic
-```
-
 ---
 
-## Structure base de données
+## Profils de démonstration
 
-```sql
-User        — id, email, password, username
-CV          — id, userId, firstName, lastName, title, summary,
-              email, phone, location, linkedin, github, website,
-              experiences, education, skills, languages,
-              certifications, photo,
-              aiProvider, aiModel, systemPrompt, isPublic
-Job         — id, userId, url, title, company, description,
-              score, grade, analysis, status, createdAt
-```
-
----
-
-## Déploiement K8s
-
-```bash
-# Build et push image
-nerdctl build --no-cache -t registry:32000/cvflow:vX .
-nerdctl push registry:32000/cvflow:vX --insecure-registry
-
-# Déployer
-kubectl set image deployment/cvflow cvflow=registry:32000/cvflow:vX -n cvflow
-```
-
----
-
-## Modèles IA recommandés
-
-| Usage | Modèle | Raison |
-|-------|--------|--------|
-| Chatbot | qwen2.5:14b | Rapide, bon français |
-| Scanner offres | qwen2.5:14b | JSON structuré fiable |
-| Prépa entretiens | qwen2.5:14b | Bon raisonnement |
-| Alternative cloud | gemini-2.0-flash | Très rapide, gratuit |
+| Profil | URL | Poste |
+|--------|-----|-------|
+| Mady NIAKATE | cvflow.onemad.uk/mady | Administrateur Système & DevOps |
+| Isaac LOORIUS | cvflow.onemad.uk/isaac-loorius | Administrateur Système & Réseaux |
 
 ---
 
