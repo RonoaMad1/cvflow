@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 
-const API = import.meta.env.VITE_API_URL || 'https://cvflow-api.onemad.uk'
+const API = import.meta.env.VITE_API_URL || 'https://cvflow-api.onemad.uk/api'
 
 const GRADES: Record<string, string> = { A: '#10b981', B: '#06b6d4', C: '#f59e0b', D: '#f97316', F: '#ef4444' }
 const STATUSES = ['new', 'evaluated', 'applied', 'interview', 'offer', 'rejected']
@@ -53,24 +53,23 @@ export default function PipelinePage() {
       if (filters.status) params.set('status', filters.status)
       if (filters.category) params.set('category', filters.category)
       if (filters.minScore) params.set('minScore', filters.minScore)
-      const r = await fetch(`${API}/api/scraper?${params}`, {
-        headers: { Authorization: `Bearer ${token}` }
-      })
-      const d = await r.json()
+      const r = await fetch(`${API}/scraper?${params}`)
+      const text = await r.text()
+      const d = JSON.parse(text)
       setJobs(d.jobs || [])
       setStats(d.stats)
-    } catch (e) { console.error(e) }
+    } catch (e) { console.error('Fetch error:', e) }
     setLoading(false)
   }
 
   const triggerScraper = async () => {
     setScraping(true)
-    await fetch(`${API}/api/scraper/trigger`, { method: 'POST', headers: { Authorization: `Bearer ${token}` } })
+    await fetch(`${API}/scraper/trigger`, { method: 'POST', headers: { Authorization: `Bearer ${token}` } })
     setTimeout(() => { setScraping(false); fetchJobs() }, 5000)
   }
 
   const updateStatus = async (id: number, status: string) => {
-    await fetch(`${API}/api/scraper/${id}/status`, {
+    await fetch(`${API}/scraper/${id}/status`, {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
       body: JSON.stringify({ status })
