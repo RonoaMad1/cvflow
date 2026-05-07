@@ -6,6 +6,7 @@ import LoginPage from './pages/LoginPage'
 import RegisterPage from './pages/RegisterPage'
 import LandingPage from './pages/LandingPage'
 import AdminDashboard from './pages/AdminDashboard'
+import PipelinePage from './pages/PipelinePage'
 import CVEditorPage from './pages/CVEditorPage'
 import AIConfigPage from './pages/AIConfigPage'
 import JobScannerPage from './pages/JobScannerPage'
@@ -28,6 +29,7 @@ function App() {
         <Route path="/dashboard/cv" element={<DashboardPage />} />
         <Route path="/dashboard/ai" element={<DashboardPage />} />
         <Route path="/admin" element={<AdminDashboard />} />
+        <Route path="/dashboard/pipeline" element={<PipelinePage />} />
         <Route path="/:username" element={<CVPage />} />
       </Routes>
     </BrowserRouter>
