@@ -12,6 +12,46 @@ export default function CVPage() {
   const [chatOpen, setChatOpen] = useState(false)
   const [activeSection, setActiveSection] = useState('experience')
   const chatEndRef = useRef<HTMLDivElement>(null)
+  const [isListening, setIsListening] = useState(false)
+  const [isSpeaking, setIsSpeaking] = useState(false)
+  const [voiceSupported] = useState(() => 'webkitSpeechRecognition' in window || 'SpeechRecognition' in window)
+  const recognitionRef = useRef<any>(null)
+
+  const startListening = () => {
+    const SpeechRecognition = (window as any).webkitSpeechRecognition || (window as any).SpeechRecognition
+    if (!SpeechRecognition) return
+    const recognition = new SpeechRecognition()
+    recognition.lang = 'fr-FR'
+    recognition.continuous = false
+    recognition.interimResults = false
+    recognition.onstart = () => setIsListening(true)
+    recognition.onend = () => setIsListening(false)
+    recognition.onerror = () => setIsListening(false)
+    recognition.onresult = (e: any) => {
+      const transcript = e.results[0][0].transcript
+      setInput(transcript)
+      setTimeout(() => sendMessage(transcript), 100)
+    }
+    recognitionRef.current = recognition
+    recognition.start()
+  }
+
+  const stopListening = () => {
+    recognitionRef.current?.stop()
+    setIsListening(false)
+  }
+
+  const speak = (text: string) => {
+    if (!('speechSynthesis' in window)) return
+    window.speechSynthesis.cancel()
+    const utterance = new SpeechSynthesisUtterance(text)
+    utterance.lang = 'fr-FR'
+    utterance.rate = 1.0
+    utterance.pitch = 1.0
+    utterance.onstart = () => setIsSpeaking(true)
+    utterance.onend = () => setIsSpeaking(false)
+    window.speechSynthesis.speak(utterance)
+  }
 
   useEffect(() => {
     if (username) cvAPI.getPublic(username).then(r => setCV(r.data)).catch(() => {})
@@ -31,6 +71,7 @@ export default function CVPage() {
     try {
       const res = await chatAPI.send(username, [...messages, userMsg])
       setMessages(prev => [...prev, { role: 'assistant', content: res.data.message }])
+      speak(res.data.message.slice(0, 300))
     } catch {
       setMessages(prev => [...prev, { role: 'assistant', content: 'Erreur de connexion.' }])
     }
@@ -236,7 +277,7 @@ export default function CVPage() {
               <div className="w-8 h-8 rounded-full bg-gradient-to-br from-emerald-500 to-teal-600 flex items-center justify-center text-sm font-bold">{cv.firstName?.[0]}</div>
               <div>
                 <h3 className="font-semibold text-sm">Assistant IA de {cv.firstName}</h3>
-                <div className="flex items-center gap-1"><div className="w-1.5 h-1.5 bg-emerald-400 rounded-full animate-pulse"/><p className="text-xs text-slate-400">En ligne</p></div>
+                <div className="flex items-center gap-2"><div className="w-1.5 h-1.5 bg-emerald-400 rounded-full animate-pulse"/><p className="text-xs text-slate-400">{isListening ? "🎤 Ecoute..." : isSpeaking ? "🔊 Parle..." : "En ligne"}</p></div>
               </div>
             </div>
           </div>
@@ -268,6 +309,20 @@ export default function CVPage() {
             <input value={input} onChange={e => setInput(e.target.value)} onKeyDown={e => e.key==='Enter' && sendMessage()}
               className="flex-1 bg-slate-800 text-white rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 border border-slate-700"
               placeholder="Posez une question..." />
+            {voiceSupported && (
+              <button onClick={isListening ? stopListening : startListening}
+                className={"px-3 py-2 rounded-xl text-sm transition " + (isListening ? "bg-red-500 animate-pulse text-white" : "bg-slate-700 hover:bg-slate-600 text-slate-300")}
+                title={isListening ? "Arrêter" : "Parler"}>
+                {isListening ? "⏹" : "🎤"}
+              </button>
+            )}
+            {isSpeaking && (
+              <button onClick={() => window.speechSynthesis.cancel()}
+                className="px-3 py-2 rounded-xl text-sm bg-emerald-700 hover:bg-emerald-600 text-white transition"
+                title="Arrêter la lecture">
+                🔇
+              </button>
+            )}
             <button onClick={() => sendMessage()} disabled={loading}
               className="px-4 py-2 bg-emerald-500 hover:bg-emerald-400 rounded-xl text-sm font-medium transition disabled:opacity-50">➤</button>
           </div>
