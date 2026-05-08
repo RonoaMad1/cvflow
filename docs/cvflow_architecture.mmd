@@ -1,0 +1,19 @@
+graph TD
+    R[Recruteurs] --> CF
+    C[Candidats] --> CF
+    A[Admin] --> CF
+    CF[Cloudflare Tunnel cvflow.onemad.uk]
+    CF --> FE & BE
+    subgraph K8s[Cluster K3s]
+        FE[Frontend React 19 v33]
+        BE[Backend Node.js v21]
+        PG[(PostgreSQL)]
+    end
+    FE <--> BE
+    BE --> PG & OL & EXT
+    OL[Ollama Mac Mini M4]
+    EXT[Adzuna / Gemini / Claude]
+    subgraph RAG[Pipeline RAG]
+        RA[7 chunks] --> RB[Embedding] --> RC[Top 3] --> RD[Reponse]
+    end
+    PG & OL --> RAG
