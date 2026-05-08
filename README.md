@@ -80,6 +80,92 @@ Plateforme de carrière propulsée par l'IA — CV interactif, chatbot vocal, sc
 
 ---
 
+
+
+## Architecture
+
+### Vue d'ensemble
+
+\`\`\`
+Recruteurs / Candidats / Admin
+           |
+    Cloudflare Tunnel (HTTPS)
+    cvflow.onemad.uk
+           |
++------------------------------------------+
+|  Cluster K3s (master01/02 + worker01)    |
+|                                          |
+|  +------------------+  +--------------+ |
+|  | Frontend React   |  | Features     | |
+|  | Vite · TS        |  | Web Speech   | |
+|  | /dashboard/*     |  | Chatbot RAG  | |
+|  | /admin · /       |  | Career Pipe  | |
+|  +--------+---------+  +--------------+ |
+|           |                             |
+|  +--------v--------------------------+  |
+|  |   Backend Node.js + Express       |  |
+|  |  /api/auth  /api/cv  /api/chat    |  |
+|  |  /api/jobs  /api/admin            |  |
+|  |  /api/scraper (cron 6h - Adzuna)  |  |
+|  |  RAG agéntic · Jailbreak defense  |  |
+|  +-----+----------+-------------+---+  |
+|        |          |             |       |
+|  +-----v--+ +-----v----+ +-----v-----+ |
+|  |  PG DB | | Ollama   | | Externes  | |
+|  |  2Gi   | | Mac Mini | | Adzuna    | |
+|  | ChatLog| | qwen2.5  | | Gemini    | |
+|  | CVChunk| | nomic-   | | Claude    | |
+|  |JobScrap| | embed    | | API       | |
+|  +--------+ +----------+ +-----------+ |
++------------------------------------------+
+        |           |            |
+  Registry K8s  ArgoCD GitOps  GitHub/Gitea
+  Gitea NAS     onemadlab      Code source
+\`\`\`
+
+### Pipeline RAG
+
+\`\`\`
+CV utilisateur
+     |
+     v
+Découpage en 7 types de chunks
+(summary, contact, experiences,
+ education, skills, languages, certifications)
+     |
+     v
+Embeddings Ollama (nomic-embed-text) --> CVChunk (PostgreSQL JSONB)
+
+-- A chaque message recruteur --
+Message --> Embedding requete --> Similarite cosinus vs tous les chunks
+     |
+     v
+Top 3 chunks pertinents --> Injection system prompt
+     |
+     v
+Modele IA (Ollama / Gemini / Claude) --> Reponse
+     |
+     v
+ChatLog (latence, provider, jailbreak)
+\`\`\`
+
+### Défense anti-injection
+
+\`\`\`
+Message entrant
+     |
+     v
+12 patterns regex detectes
+(ignore instructions, jailbreak, system prompt, DAN mode...)
+     |
+  +--+--+
+  |     |
+Bloque  OK --> Pipeline RAG normal
+  |
+  v
+ChatLog (is_jailbreak=true) + reponse neutre
+\`\`\`
+
 ## Installation locale
 
 ```bash
